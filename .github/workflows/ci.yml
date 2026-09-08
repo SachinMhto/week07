@@ -93,7 +93,7 @@ jobs:
         run: |
           pytest -v
 
-    # =========================================================
+  # =========================================================
   # Build and Push Docker Images
   # =========================================================
   build-and-push:
@@ -109,6 +109,7 @@ jobs:
 
     strategy:
       fail-fast: false
+
       matrix:
         include:
           - service: frontend
@@ -130,7 +131,7 @@ jobs:
             image: koalatech-enrollment-service
 
     steps:
-           - name: Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v5
 
       - name: Login to Azure
@@ -142,6 +143,7 @@ jobs:
       - name: Login to Azure Container Registry
         run: |
           az acr login --name ${{ vars.ACR_NAME }}
+
       - name: Build Docker image
         run: |
           docker build \
