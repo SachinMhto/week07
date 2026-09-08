@@ -94,7 +94,6 @@ jobs:
     name: Build and Push ${{ matrix.image }}
     runs-on: ubuntu-latest
 
-    # All backend tests must pass first
     needs:
       - backend-test
 
@@ -124,13 +123,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      # Direct ACR login avoids the CloudLabs subscription-discovery issue
       - name: Login to Azure Container Registry
-        env:
-          ACR_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-          ACR_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
         run: |
-          echo "$ACR_CLIENT_SECRET" | docker login "${{ vars.ACR_LOGIN_SERVER }}" --username "$ACR_CLIENT_ID" --password-stdin
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login "${{ vars.ACR_LOGIN_SERVER }}" --username "${{ secrets.ACR_USERNAME }}" --password-stdin
 
       - name: Build Docker image
         run: |
